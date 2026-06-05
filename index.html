@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenLog — Your Personal Medical Cannabis Tracker</title>
+  <meta name="description" content="GreenLog is a free iOS app for UK medical cannabis patients to log strains, rate experiences, track spending, and share recommendations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-raised: #141414;
+      --bg-card: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #f0ede8;
+      --text-muted: #8a8780;
+      --green: #34c759;
+      --green-dim: #2a9d47;
+      --green-glow: rgba(52, 199, 89, 0.15);
+      --gold: #c9a94e;
+      --gold-dim: rgba(201, 169, 78, 0.1);
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Noise overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── Layout ─── */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Navigation ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo svg { width: 28px; height: 28px; }
+
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--green) !important;
+      color: #000 !important;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-weight: 600 !important;
+      font-size: 0.85rem !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--green-glow);
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      padding: 180px 0 100px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      background: var(--bg-raised);
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: #000;
+      padding: 14px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--green-glow);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text);
+      padding: 14px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: #444;
+      background: var(--bg-raised);
+    }
+
+    /* ─── Phone showcase ─── */
+    .phone-showcase {
+      padding: 60px 0 0;
+      position: relative;
+    }
+
+    .phone-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      padding: 20px 0 40px;
+    }
+
+    .phone-frame {
+      flex: 0 0 auto;
+      width: 220px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+
+    .phone-frame:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .phone-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .phone-frame-hero {
+      width: 260px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08), 0 0 80px var(--green-glow);
+    }
+
+    .showcase-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+
+    /* ─── Section styles ─── */
+    section { padding: 120px 0; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ─── Features grid ─── */
+    #features { border-top: 1px solid var(--border); }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .features-header .section-desc { margin: 0 auto; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--bg-raised);
+      padding: 48px 36px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .feature-card:hover { background: var(--bg-card); }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 1.4rem;
+      background: var(--green-glow);
+      border: 1px solid rgba(52, 199, 89, 0.15);
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    /* ─── Deep dive sections ─── */
+    .deep-dive {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .deep-dive.reverse { direction: rtl; }
+    .deep-dive.reverse > * { direction: ltr; }
+
+    .deep-dive-phones {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .deep-dive-phones .phone-frame {
+      width: 200px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .deep-dive-content .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .tag {
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .tag.green { background: var(--green-glow); border-color: rgba(52,199,89,0.2); color: var(--green); }
+
+    /* ─── Verdict section ─── */
+    .verdict-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .verdict-card {
+      background: var(--bg-raised);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    .verdict-emoji { font-size: 2rem; margin-bottom: 12px; }
+
+    .verdict-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .verdict-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Privacy section ─── */
+    .privacy-section {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 48px;
+    }
+
+    .privacy-item {
+      text-align: center;
+    }
+
+    .privacy-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+
+    .privacy-item h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .privacy-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Beta CTA ─── */
+    .beta-cta {
+      text-align: center;
+      position: relative;
+    }
+
+    .beta-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .beta-box {
+      position: relative;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 80px 40px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .beta-box .section-title { margin-bottom: 16px; }
+
+    .beta-box .section-desc {
+      margin: 0 auto 36px;
+      text-align: center;
+    }
+
+    .beta-requirements {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .beta-req {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .beta-req svg { color: var(--green); flex-shrink: 0; }
+
+    /* ─── Footer ─── */
+    footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-text a { color: var(--green); text-decoration: none; }
+
+    /* ─── Animations ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .deep-dive { grid-template-columns: 1fr; gap: 48px; }
+      .deep-dive.reverse { direction: ltr; }
+      .verdict-grid { grid-template-columns: repeat(2, 1fr); }
+      .privacy-grid { grid-template-columns: 1fr; gap: 32px; }
+      .phone-row { gap: 12px; }
+      .phone-frame { width: 160px; border-radius: 20px; }
+      .phone-frame-hero { width: 190px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .phone-frame { width: 130px; border-radius: 16px; }
+      .phone-frame-hero { width: 160px; }
+      .deep-dive-phones .phone-frame { width: 150px; }
+      .beta-box { padding: 48px 24px; }
+      .hero { padding: 140px 0 60px; }
+      section { padding: 80px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4C16 4 8 8 8 16C8 20.4 11.6 28 16 28C20.4 28 24 20.4 24 16C24 8 16 4 16 4Z" fill="#34c759" opacity="0.9"/>
+          <path d="M16 4C16 4 12 12 16 20" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+        GreenLog
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#beta" class="nav-cta">Join Beta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge fade-up">
+        <span class="dot"></span>
+        Beta — Now accepting testers
+      </div>
+      <h1 class="fade-up">Track your cannabis,<br><em>know your medicine</em></h1>
+      <p class="hero-sub fade-up">
+        A free iOS app for UK medical cannabis patients. Log every strain, rate your experience, track spending, and build shareable recommendations — all private, all yours.
+      </p>
+      <div class="hero-actions fade-up">
+        <a href="#beta" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Join the Beta
+        </a>
+        <a href="#features" class="btn-secondary">See Features ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phone showcase -->
+  <div class="phone-showcase" id="screenshots">
+    <div class="container">
+      <div class="phone-row fade-up">
+        <div class="phone-frame"><img src="screenshots/welcome.png" alt="GreenLog welcome screen" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/add-strain-filled.png" alt="Logging a strain with details" loading="lazy"></div>
+        <div class="phone-frame phone-frame-hero"><img src="screenshots/dashboard-data.png" alt="GreenLog dashboard with data" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending insights and analytics" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/share-lists.png" alt="Shareable strain lists" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="showcase-fade"></div>
+  </div>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <div class="features-header fade-up">
+        <p class="section-label">Features</p>
+        <h2 class="section-title">Everything you need to make<br>smarter prescription decisions</h2>
+        <p class="section-desc">Built by a UK medical cannabis patient who got tired of keeping notes in a phone app and forgetting which strains were worth reordering.</p>
+      </div>
+
+      <div class="features-grid fade-up">
+        <div class="feature-card">
+          <div class="feature-icon">🌿</div>
+          <h3>Detailed Strain Logging</h3>
+          <p>Log strain name, breeder, dispensary, THC/CBD %, batch number, product form (flower, oil, vape, hash, pastilles, rosin), and hybrid percentage splits.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Five-Point Rating System</h3>
+          <p>Rate every strain on Smell, Taste, Looks, Effects, and Overall Enjoyment on a 1–10 scale. Tag dominant effects, side effects, onset time, and duration.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>Smart Verdict Engine</h3>
+          <p>Auto-categorises every strain: Definite Rebuy, Budget Pick, Never Again, or Needs Investigation — with fully configurable thresholds and transparent reasoning.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Insights &amp; Analytics</h3>
+          <p>Monthly spending charts, category breakdowns, price vs. rating analysis, dispensary comparisons, effects heatmaps, and medical condition correlations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <h3>Shareable Lists</h3>
+          <p>Create curated lists and share via iMessage, WhatsApp, or PDF. Auto-generated lists by verdict. Prices hidden by default for privacy.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔬</div>
+          <h3>Terpene Tracking</h3>
+          <p>Log dominant terpenes — Myrcene, Limonene, Caryophyllene, Pinene, Linalool, and more. Analytics correlate which terpene profiles you respond best to.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3>Spending Tracker</h3>
+          <p>Know exactly what you're spending per month, per gram, per dispensary. See your average price over time and find where you're getting best value.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔄</div>
+          <h3>Batch Comparison</h3>
+          <p>Same strain, different batch? Compare side-by-side with ratings, THC %, and price variance highlighted automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏥</div>
+          <h3>Medical Insights</h3>
+          <p>Tag what each strain is prescribed for and discover patterns — which categories, terpenes, and THC ranges best serve each condition.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep dive: Logging -->
+  <section>
+    <div class="container">
+      <div class="deep-dive fade-up">
+        <div class="deep-dive-content">
+          <p class="section-label">Strain Logging</p>
+          <h2 class="section-title">Log every detail that matters</h2>
+          <p class="section-desc">
+            From strain name and breeder to THC/CBD percentages, batch numbers, and pricing — capture everything in a clean, intuitive form. Tag what it's prescribed for, rate your experience across five categories, and note the effects you feel.
+          </p>
+          <div class="tag-list">
+            <span class="tag green">Pain</span>
+            <span class="tag">Sleep</span>
+            <span class="tag">Anxiety</span>
+            <span class="tag">Appetite</span>
+            <span class="tag">Nausea</span>
+            <span class="tag">Depression</span>
+            <span class="tag">PTSD</span>
+            <span class="tag">Spasticity</span>
+          </div>
+        </div>
+        <div class="deep-dive-phones">
+          <div class="phone-frame"><img src="screenshots/add-strain-form.png" alt="Add strain product form" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/add-strain-ratings.png" alt="Rating sliders and effects" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep dive: Insights -->
+  <section style="background: var(--bg-raised); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="deep-dive reverse fade-up">
+        <div class="deep-dive-content">
+          <p class="section-label">Analytics</p>
+          <h2 class="section-title">Understand what actually works for you</h2>
+          <p class="section-desc">
+            Go beyond guesswork. See which effects appear most in your highest-rated strains. Compare dispensary value. Find out if expensive strains are actually better with the price vs. rating analysis. Medical insights surface which strain profiles best serve each condition you're treating.
+          </p>
+        </div>
+        <div class="deep-dive-phones">
+          <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending analytics" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/insights-effects.png" alt="Effects and dispensary insights" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep dive: Verdicts -->
+  <section>
+    <div class="container">
+      <div class="fade-up" style="text-align:center; max-width:640px; margin:0 auto;">
+        <p class="section-label">Smart Verdicts</p>
+        <h2 class="section-title">Never forget what's worth reordering</h2>
+        <p class="section-desc" style="margin:0 auto;">
+          Every strain gets an automatic verdict based on your ratings and the price. The logic is fully configurable — adjust thresholds, weight price sensitivity, prioritise effects over bag appeal, or disable ratings you don't care about.
+        </p>
+      </div>
+
+      <div class="verdict-grid fade-up">
+        <div class="verdict-card">
+          <div class="verdict-emoji">🟢</div>
+          <h4>Definite Rebuy</h4>
+          <p>High ratings across the board. Worth every penny. Get this on your next script.</p>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-emoji">🟡</div>
+          <h4>Budget Pick</h4>
+          <p>Ratings are decent. The price makes it a solid choice when the top shelf is out.</p>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-emoji">🔴</div>
+          <h4>Never Again</h4>
+          <p>Didn't work, didn't enjoy it. Save your money and avoid next time.</p>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-emoji">🟠</div>
+          <h4>Needs Investigation</h4>
+          <p>Mixed signals. Could be a bad batch. Worth trying again before writing off.</p>
+        </div>
+      </div>
+
+      <div class="fade-up" style="margin-top:40px; text-align:center;">
+        <div class="deep-dive-phones" style="justify-content:center;">
+          <div class="phone-frame" style="width:220px;"><img src="screenshots/settings.png" alt="Configurable verdict engine settings" loading="lazy"></div>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:20px;">Fully configurable verdict thresholds, price sensitivity, and active ratings</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy -->
+  <section class="privacy-section" id="privacy">
+    <div class="container">
+      <div class="fade-up" style="text-align:center;">
+        <p class="section-label">Privacy First</p>
+        <h2 class="section-title">Your data stays yours</h2>
+      </div>
+
+      <div class="privacy-grid fade-up">
+        <div class="privacy-item">
+          <div class="privacy-icon">🔒</div>
+          <h3>On-Device Storage</h3>
+          <p>All data lives locally on your iPhone. Nothing is uploaded to external servers. No account required.</p>
+        </div>
+        <div class="privacy-item">
+          <div class="privacy-icon">☁️</div>
+          <h3>Optional iCloud Sync</h3>
+          <p>Sync across your Apple devices via your personal iCloud account. Toggle it on or off — your choice.</p>
+        </div>
+        <div class="privacy-item">
+          <div class="privacy-icon">📤</div>
+          <h3>Full Data Export</h3>
+          <p>Export everything as JSON or CSV at any time. Your data is never locked in. Delete it all with one tap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beta CTA -->
+  <section class="beta-cta" id="beta">
+    <div class="container">
+      <div class="beta-box fade-up">
+        <p class="section-label">Beta Programme</p>
+        <h2 class="section-title">Help shape GreenLog</h2>
+        <p class="section-desc">
+          We're looking for UK medical cannabis patients to test GreenLog via TestFlight and share honest feedback. The app is free and your data stays completely private.
+        </p>
+        <div class="beta-requirements">
+          <div class="beta-req">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            iPhone with iOS 17+
+          </div>
+          <div class="beta-req">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            UK medical cannabis patient
+          </div>
+          <div class="beta-req">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Willing to give feedback
+          </div>
+        </div>
+        <a href="https://www.reddit.com/r/ukmedicalcannabis/" class="btn-primary" target="_blank">
+          Request TestFlight Access
+        </a>
+        <p style="margin-top:16px; font-size:0.82rem; color:var(--text-muted);">DM on Reddit or comment on our post in r/ukmedicalcannabis</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="footer-text">
+        GreenLog is a personal tracking tool for legally prescribed medical cannabis in the United Kingdom. This app does not provide medical advice. Always consult your prescribing clinician regarding your medication.
+        <br><br>
+        Built with care in Scotland 🏴󠁧󠁢󠁳󠁣󠁴󠁿
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
