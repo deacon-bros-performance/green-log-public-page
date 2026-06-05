@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenLog — Your Personal Medical Cannabis Tracker</title>
-  <meta name="description" content="GreenLog is a free iOS app for UK medical cannabis patients to log strains, rate experiences, track spending, and share recommendations.">
+  <meta name="description" content="GreenLog is a free iOS app for UK medical cannabis patients. Log strains, track symptoms, rate experiences, analyse spending and THC value, and share recommendations — all private, all yours.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -38,7 +38,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── Noise overlay ─── */
     body::before {
       content: '';
       position: fixed;
@@ -49,509 +48,245 @@
       z-index: 9999;
     }
 
-    /* ─── Layout ─── */
     .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
-    /* ─── Navigation ─── */
+    /* ─── Nav ─── */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 20px 0;
       background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-
-    nav .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      color: var(--text);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--serif); font-size: 1.5rem;
+      color: var(--text); text-decoration: none;
     }
-
     .nav-logo svg { width: 28px; height: 28px; }
-
     .nav-links { display: flex; gap: 32px; align-items: center; }
-
     .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      transition: color 0.2s;
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 400; letter-spacing: 0.01em; transition: color 0.2s;
     }
-
     .nav-links a:hover { color: var(--text); }
-
     .nav-cta {
-      background: var(--green) !important;
-      color: #000 !important;
-      padding: 8px 20px;
-      border-radius: 100px;
-      font-weight: 600 !important;
-      font-size: 0.85rem !important;
+      background: var(--green) !important; color: #000 !important;
+      padding: 8px 20px; border-radius: 100px;
+      font-weight: 600 !important; font-size: 0.85rem !important;
       transition: transform 0.2s, box-shadow 0.2s !important;
     }
-
-    .nav-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 20px var(--green-glow);
-    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--green-glow); }
 
     /* ─── Hero ─── */
-    .hero {
-      padding: 180px 0 100px;
-      text-align: center;
-      position: relative;
-    }
-
+    .hero { padding: 180px 0 100px; text-align: center; position: relative; }
     .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px;
       background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 32px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border: 1px solid var(--border); border-radius: 100px;
+      font-size: 0.8rem; color: var(--text-muted); margin-bottom: 32px;
       background: var(--bg-raised);
     }
-
     .hero-badge .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
       animation: pulse 2s infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 24px;
-      position: relative;
+      font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 400;
+      line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; position: relative;
     }
-
-    .hero h1 em {
-      font-style: italic;
-      color: var(--green);
-    }
-
+    .hero h1 em { font-style: italic; color: var(--green); }
     .hero-sub {
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      color: var(--text-muted);
-      max-width: 560px;
-      margin: 0 auto 48px;
-      line-height: 1.7;
+      font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--text-muted);
+      max-width: 600px; margin: 0 auto 48px; line-height: 1.7;
     }
-
     .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
     .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green);
-      color: #000;
-      padding: 14px 32px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green); color: #000; padding: 14px 32px;
+      border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 1rem;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--green-glow);
-    }
-
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--green-glow); }
     .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: transparent;
-      color: var(--text);
-      padding: 14px 32px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      border: 1px solid var(--border);
-      transition: border-color 0.2s, background 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text); padding: 14px 32px;
+      border-radius: 100px; text-decoration: none; font-weight: 500; font-size: 1rem;
+      border: 1px solid var(--border); transition: border-color 0.2s, background 0.2s;
     }
-
-    .btn-secondary:hover {
-      border-color: #444;
-      background: var(--bg-raised);
-    }
+    .btn-secondary:hover { border-color: #444; background: var(--bg-raised); }
 
     /* ─── Phone showcase ─── */
-    .phone-showcase {
-      padding: 60px 0 0;
-      position: relative;
-    }
-
+    .phone-showcase { padding: 60px 0 0; position: relative; }
     .phone-row {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: nowrap;
-      overflow: hidden;
-      padding: 20px 0 40px;
+      display: flex; justify-content: center; gap: 24px; flex-wrap: nowrap;
+      overflow: hidden; padding: 20px 0 40px;
     }
-
     .phone-frame {
-      flex: 0 0 auto;
-      width: 220px;
-      border-radius: 28px;
-      overflow: hidden;
+      flex: 0 0 auto; width: 220px; border-radius: 28px; overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      position: relative;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); position: relative;
     }
-
-    .phone-frame:hover {
-      transform: translateY(-8px) scale(1.02);
-    }
-
-    .phone-frame img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
+    .phone-frame:hover { transform: translateY(-8px) scale(1.02); }
+    .phone-frame img { width: 100%; height: auto; display: block; }
     .phone-frame-hero {
       width: 260px;
       box-shadow: 0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08), 0 0 80px var(--green-glow);
     }
-
     .showcase-fade {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 120px;
-      background: linear-gradient(to bottom, transparent, var(--bg));
-      pointer-events: none;
+      position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none;
     }
 
-    /* ─── Section styles ─── */
+    /* ─── Sections ─── */
     section { padding: 120px 0; }
-
     .section-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--green);
-      margin-bottom: 16px;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--green); margin-bottom: 16px;
     }
-
     .section-title {
       font-family: var(--serif);
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
-      font-weight: 400;
-      line-height: 1.15;
-      letter-spacing: -0.01em;
-      margin-bottom: 20px;
+      font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 400;
+      line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 20px;
     }
-
-    .section-desc {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      line-height: 1.7;
-    }
+    .section-desc { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; line-height: 1.7; }
 
     /* ─── Features grid ─── */
     #features { border-top: 1px solid var(--border); }
-
-    .features-header {
-      text-align: center;
-      margin-bottom: 80px;
-    }
-
+    .features-header { text-align: center; margin-bottom: 80px; }
     .features-header .section-desc { margin: 0 auto; }
-
     .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--border);
-      border-radius: 20px;
-      overflow: hidden;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+      background: var(--border); border-radius: 20px; overflow: hidden;
     }
-
     .feature-card {
-      background: var(--bg-raised);
-      padding: 48px 36px;
-      position: relative;
-      transition: background 0.3s;
+      background: var(--bg-raised); padding: 48px 36px; transition: background 0.3s;
     }
-
     .feature-card:hover { background: var(--bg-card); }
-
     .feature-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
-      font-size: 1.4rem;
-      background: var(--green-glow);
-      border: 1px solid rgba(52, 199, 89, 0.15);
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px; font-size: 1.4rem;
+      background: var(--green-glow); border: 1px solid rgba(52, 199, 89, 0.15);
     }
+    .feature-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
 
-    .feature-card h3 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.65;
-    }
-
-    /* ─── Deep dive sections ─── */
+    /* ─── Deep dive ─── */
     .deep-dive {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
     }
-
     .deep-dive.reverse { direction: rtl; }
     .deep-dive.reverse > * { direction: ltr; }
-
-    .deep-dive-phones {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-
+    .deep-dive-phones { display: flex; gap: 16px; justify-content: center; }
     .deep-dive-phones .phone-frame {
       width: 200px;
       box-shadow: 0 16px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
     }
-
-    .deep-dive-content .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
+    .deep-dive-content .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
     .tag {
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
+      padding: 6px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 500;
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
     }
-
     .tag.green { background: var(--green-glow); border-color: rgba(52,199,89,0.2); color: var(--green); }
+    .tag.red { background: rgba(255,59,48,0.1); border-color: rgba(255,59,48,0.2); color: #ff6b6b; }
 
-    /* ─── Verdict section ─── */
+    /* ─── Guided session steps ─── */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+    }
+    .step-card {
+      background: var(--bg-raised); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 24px;
+    }
+    .step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--green); color: #000; font-size: 0.8rem; font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .step-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    .step-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── Verdict cards ─── */
     .verdict-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      background: var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-top: 48px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+      background: var(--border); border-radius: 16px; overflow: hidden; margin-top: 48px;
     }
-
-    .verdict-card {
-      background: var(--bg-raised);
-      padding: 32px 24px;
-      text-align: center;
-    }
-
+    .verdict-card { background: var(--bg-raised); padding: 32px 24px; text-align: center; }
     .verdict-emoji { font-size: 2rem; margin-bottom: 12px; }
+    .verdict-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+    .verdict-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
 
-    .verdict-card h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 8px;
+    /* ─── Product forms ─── */
+    .forms-row {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 32px;
+    }
+    .form-pill {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 100px;
+      background: var(--bg-raised); border: 1px solid var(--border);
+      font-size: 0.9rem; font-weight: 500; color: var(--text);
     }
 
-    .verdict-card p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ─── Privacy section ─── */
-    .privacy-section {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .privacy-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 48px;
-      margin-top: 48px;
-    }
-
-    .privacy-item {
-      text-align: center;
-    }
-
+    /* ─── Privacy ─── */
+    .privacy-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .privacy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 48px; }
+    .privacy-item { text-align: center; }
     .privacy-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-size: 1.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
     }
-
-    .privacy-item h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .privacy-item p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
+    .privacy-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+    .privacy-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
 
     /* ─── Beta CTA ─── */
-    .beta-cta {
-      text-align: center;
-      position: relative;
-    }
-
+    .beta-cta { text-align: center; position: relative; }
     .beta-cta::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 400px;
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); width: 600px; height: 400px;
       background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .beta-box {
-      position: relative;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 80px 40px;
-      max-width: 700px;
-      margin: 0 auto;
+      position: relative; background: var(--bg-raised); border: 1px solid var(--border);
+      border-radius: 24px; padding: 80px 40px; max-width: 700px; margin: 0 auto;
     }
-
     .beta-box .section-title { margin-bottom: 16px; }
-
-    .beta-box .section-desc {
-      margin: 0 auto 36px;
-      text-align: center;
-    }
-
+    .beta-box .section-desc { margin: 0 auto 36px; text-align: center; }
     .beta-requirements {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
+      display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;
     }
-
-    .beta-req {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
+    .beta-req { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
     .beta-req svg { color: var(--green); flex-shrink: 0; }
 
     /* ─── Footer ─── */
-    footer {
-      padding: 48px 0;
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-
+    footer { padding: 48px 0; border-top: 1px solid var(--border); text-align: center; }
     .footer-text {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      max-width: 600px;
-      margin: 0 auto;
+      font-size: 0.82rem; color: var(--text-muted); line-height: 1.8;
+      max-width: 600px; margin: 0 auto;
     }
-
-    .footer-text a { color: var(--green); text-decoration: none; }
 
     /* ─── Animations ─── */
     .fade-up {
-      opacity: 0;
-      transform: translateY(30px);
+      opacity: 0; transform: translateY(30px);
       transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
-
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
     /* ─── Responsive ─── */
     @media (max-width: 900px) {
-      .features-grid { grid-template-columns: 1fr; }
+      .features-grid, .steps-grid { grid-template-columns: 1fr; }
       .deep-dive { grid-template-columns: 1fr; gap: 48px; }
       .deep-dive.reverse { direction: ltr; }
       .verdict-grid { grid-template-columns: repeat(2, 1fr); }
@@ -561,7 +296,6 @@
       .phone-frame-hero { width: 190px; }
       .nav-links a:not(.nav-cta) { display: none; }
     }
-
     @media (max-width: 600px) {
       .phone-frame { width: 130px; border-radius: 16px; }
       .phone-frame-hero { width: 160px; }
@@ -586,6 +320,7 @@
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
+        <a href="#guided-session">Guided Session</a>
         <a href="#screenshots">Screenshots</a>
         <a href="#privacy">Privacy</a>
         <a href="#beta" class="nav-cta">Join Beta</a>
@@ -602,7 +337,7 @@
       </div>
       <h1 class="fade-up">Track your cannabis,<br><em>know your medicine</em></h1>
       <p class="hero-sub fade-up">
-        A free iOS app for UK medical cannabis patients. Log every strain, rate your experience, track spending, and build shareable recommendations — all private, all yours.
+        A free iOS app for UK medical cannabis patients. Log every product form, track symptom relief, analyse THC value for money, and share recommendations — all private, all yours.
       </p>
       <div class="hero-actions fade-up">
         <a href="#beta" class="btn-primary">
@@ -611,6 +346,16 @@
         </a>
         <a href="#features" class="btn-secondary">See Features ↓</a>
       </div>
+
+      <!-- Product forms row -->
+      <div class="forms-row fade-up" style="margin-top: 48px;">
+        <div class="form-pill">🌿 Flower</div>
+        <div class="form-pill">💧 Oil</div>
+        <div class="form-pill">💨 Vape</div>
+        <div class="form-pill">💊 Pastilles</div>
+        <div class="form-pill">🔥 Rosin</div>
+        <div class="form-pill">🟫 Hash</div>
+      </div>
     </div>
   </section>
 
@@ -618,11 +363,11 @@
   <div class="phone-showcase" id="screenshots">
     <div class="container">
       <div class="phone-row fade-up">
-        <div class="phone-frame"><img src="screenshots/welcome.png" alt="GreenLog welcome screen" loading="lazy"></div>
-        <div class="phone-frame"><img src="screenshots/add-strain-filled.png" alt="Logging a strain with details" loading="lazy"></div>
-        <div class="phone-frame phone-frame-hero"><img src="screenshots/dashboard-data.png" alt="GreenLog dashboard with data" loading="lazy"></div>
-        <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending insights and analytics" loading="lazy"></div>
-        <div class="phone-frame"><img src="screenshots/share-lists.png" alt="Shareable strain lists" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/session-step6-prepare.png" alt="Guided session symptom tracking" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/add-strain-details.png" alt="Detailed strain logging form" loading="lazy"></div>
+        <div class="phone-frame phone-frame-hero"><img src="screenshots/dashboard-data.png" alt="Dashboard with stats, favourites, wishlist and top picks" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending and THC value analytics" loading="lazy"></div>
+        <div class="phone-frame"><img src="screenshots/session-step9-overall.png" alt="Session summary with symptom changes" loading="lazy"></div>
       </div>
     </div>
     <div class="showcase-fade"></div>
@@ -639,55 +384,123 @@
 
       <div class="features-grid fade-up">
         <div class="feature-card">
-          <div class="feature-icon">🌿</div>
-          <h3>Detailed Strain Logging</h3>
-          <p>Log strain name, breeder, dispensary, THC/CBD %, batch number, product form (flower, oil, vape, hash, pastilles, rosin), and hybrid percentage splits.</p>
+          <div class="feature-icon">🎯</div>
+          <h3>Guided Session</h3>
+          <p>A 9-step walkthrough that guides you through evaluating a strain properly — from product details and photos through smell, inspect, prepare, taste, effects, and overall verdict. Tracks symptoms before and after with live change summaries.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">⭐</div>
-          <h3>Five-Point Rating System</h3>
-          <p>Rate every strain on Smell, Taste, Looks, Effects, and Overall Enjoyment on a 1–10 scale. Tag dominant effects, side effects, onset time, and duration.</p>
+          <div class="feature-icon">🌿</div>
+          <h3>All Product Forms</h3>
+          <p>Flower, oil, vape, pastilles, rosin/extracts, and hash — each with tailored fields. Oils and pastilles track concentration (mg/ml or mg/unit). Consumption methods filter automatically by product type.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🧠</div>
           <h3>Smart Verdict Engine</h3>
-          <p>Auto-categorises every strain: Definite Rebuy, Budget Pick, Never Again, or Needs Investigation — with fully configurable thresholds and transparent reasoning.</p>
+          <p>Auto-categorises every strain into Definite Rebuy, Budget Pick, Needs Investigation, or Never Again — using cost per mg of THC for true value analysis. Fully configurable thresholds with transparent reasoning.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">📊</div>
-          <h3>Insights &amp; Analytics</h3>
-          <p>Monthly spending charts, category breakdowns, price vs. rating analysis, dispensary comparisons, effects heatmaps, and medical condition correlations.</p>
+          <h3>THC Value Analytics</h3>
+          <p>Cost per mg of THC across all product forms, best/worst value cards, cost efficiency vs rating scatter plots, dispensary comparisons, and category breakdowns — powered by Swift Charts.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🤝</div>
-          <h3>Shareable Lists</h3>
-          <p>Create curated lists and share via iMessage, WhatsApp, or PDF. Auto-generated lists by verdict. Prices hidden by default for privacy.</p>
+          <div class="feature-icon">🩺</div>
+          <h3>Symptom Tracking</h3>
+          <p>Rate symptom severity before and after each session with dynamic scales tailored to your condition — Pain (None→Severe), Sleep (Poor→Great), Anxiety (Calm→Severe). See live improvement summaries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Favourites &amp; Wishlist</h3>
+          <p>Dedicated favourites view grouped by product form with summary stats. Wishlist tracks strains you want to try — with priority stars, source notes, and one-tap "mark as purchased" when you order.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⏸️</div>
+          <h3>Tolerance Break Tracker</h3>
+          <p>Start a T-Break with preset or custom durations. Circular progress ring, daily mood check-ins with emoji picker, symptom tracking, mood trend visualisation, and break history with completion badges.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🔬</div>
-          <h3>Terpene Tracking</h3>
-          <p>Log dominant terpenes — Myrcene, Limonene, Caryophyllene, Pinene, Linalool, and more. Analytics correlate which terpene profiles you respond best to.</p>
+          <h3>Terpene Profiling</h3>
+          <p>Log dominant terpenes with scent hints — Myrcene, Limonene, Caryophyllene, Pinene, Linalool, Humulene, Terpinolene. Analytics correlate which profiles you respond best to.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">💰</div>
-          <h3>Spending Tracker</h3>
-          <p>Know exactly what you're spending per month, per gram, per dispensary. See your average price over time and find where you're getting best value.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔄</div>
-          <h3>Batch Comparison</h3>
-          <p>Same strain, different batch? Compare side-by-side with ratings, THC %, and price variance highlighted automatically.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🏥</div>
-          <h3>Medical Insights</h3>
-          <p>Tag what each strain is prescribed for and discover patterns — which categories, terpenes, and THC ranges best serve each condition.</p>
+          <div class="feature-icon">🤝</div>
+          <h3>Share Lists &amp; PDF Export</h3>
+          <p>Create curated shareable lists. Auto-generated lists by verdict. Export as branded PDFs or share via iMessage, WhatsApp, AirDrop. Prices hidden by default for privacy.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Deep dive: Logging -->
+  <!-- Guided Session deep dive -->
+  <section id="guided-session" style="background: var(--bg-raised); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="fade-up" style="text-align:center; max-width:640px; margin:0 auto;">
+        <p class="section-label">Guided Session</p>
+        <h2 class="section-title">A proper way to evaluate your medication</h2>
+        <p class="section-desc" style="margin:0 auto;">Nine steps that walk you through rating a strain the right way — with a session timer, symptom tracking before and after, and a verdict overlay when you save.</p>
+      </div>
+
+      <div class="steps-grid fade-up">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h4>Product Details</h4>
+          <p>Product form, strain name, category with hybrid split slider, THC/CBD %, breeder, dispensary, batch number.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h4>Pricing</h4>
+          <p>Price per unit (g/ml/unit depending on form), quantity, purchase date. Total calculated automatically.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h4>Photo</h4>
+          <p>Take or choose a photo of the product to build your visual strain library.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <h4>Smell</h4>
+          <p>Rate the aroma 0–10 and identify terpenes with scent hints. Available for flower, hash, and rosin.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <h4>Inspect</h4>
+          <p>Rate looks 0–10 with a visual quality checklist — trichomes, colour, trim, seeds, mould detection.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <h4>Prepare</h4>
+          <p>Select what it's prescribed for, consumption method (auto-filtered by form), pre-consumption mood and symptom severity ratings.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">7</div>
+          <h4>Taste &amp; Effects</h4>
+          <p>Rate taste and effects, onset time, post-consumption mood and symptoms. Live before/after comparison shows improvement or worsening.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">8</div>
+          <h4>Effects Profile</h4>
+          <p>Duration, dominant effects tags (Relaxing, Uplifting, Pain Relief…), and side effects tags (Dry Mouth, Red Eyes…).</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">9</div>
+          <h4>Overall</h4>
+          <p>Session summary with duration, mood change, symptom changes. Overall enjoyment rating, notes, favourite toggle. Verdict overlay on save.</p>
+        </div>
+      </div>
+
+      <!-- Session screenshots showcase -->
+      <div class="fade-up" style="margin-top: 64px;">
+        <div class="phone-row" style="padding-bottom: 0;">
+          <div class="phone-frame"><img src="screenshots/session-step1-details.png" alt="Step 1: Product Details" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/session-step4-smell.png" alt="Step 4: Smell rating with terpene hints" loading="lazy"></div>
+          <div class="phone-frame phone-frame-hero"><img src="screenshots/session-step6-prepare.png" alt="Step 6: Prepare with symptom tracking" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/session-step7-taste.png" alt="Step 7: Taste & Effects with mood tracking" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/session-step9-overall.png" alt="Step 9: Session summary and verdict" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
   <section>
     <div class="container">
       <div class="deep-dive fade-up">
@@ -695,7 +508,7 @@
           <p class="section-label">Strain Logging</p>
           <h2 class="section-title">Log every detail that matters</h2>
           <p class="section-desc">
-            From strain name and breeder to THC/CBD percentages, batch numbers, and pricing — capture everything in a clean, intuitive form. Tag what it's prescribed for, rate your experience across five categories, and note the effects you feel.
+            Whether you use the guided session or quick-add, every product gets a comprehensive entry — strain name, breeder, dispensary, batch number, THC/CBD percentages, pricing, terpene profiles, ratings, effects, and symptom tracking. Fields adapt automatically based on product form.
           </p>
           <div class="tag-list">
             <span class="tag green">Pain</span>
@@ -707,10 +520,17 @@
             <span class="tag">PTSD</span>
             <span class="tag">Spasticity</span>
           </div>
+          <div class="tag-list" style="margin-top: 8px;">
+            <span class="tag green">Relaxing</span>
+            <span class="tag green">Pain Relief</span>
+            <span class="tag green">Sedating</span>
+            <span class="tag red">Dry Mouth</span>
+            <span class="tag red">Red Eyes</span>
+          </div>
         </div>
         <div class="deep-dive-phones">
-          <div class="phone-frame"><img src="screenshots/add-strain-form.png" alt="Add strain product form" loading="lazy"></div>
-          <div class="phone-frame"><img src="screenshots/add-strain-ratings.png" alt="Rating sliders and effects" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/add-strain-details.png" alt="Strain logging form" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/add-strain-effects.png" alt="Effects, terpenes, and ratings" loading="lazy"></div>
         </div>
       </div>
     </div>
@@ -722,27 +542,27 @@
       <div class="deep-dive reverse fade-up">
         <div class="deep-dive-content">
           <p class="section-label">Analytics</p>
-          <h2 class="section-title">Understand what actually works for you</h2>
+          <h2 class="section-title">Understand what actually works — and what's worth the money</h2>
           <p class="section-desc">
-            Go beyond guesswork. See which effects appear most in your highest-rated strains. Compare dispensary value. Find out if expensive strains are actually better with the price vs. rating analysis. Medical insights surface which strain profiles best serve each condition you're treating.
+            Monthly spending charts, THC value for money rankings (cost per mg of THC across all product forms), cost efficiency vs rating scatter plots, category breakdowns, dispensary comparisons, effects heatmaps in top strains, and rating distributions. Every chart is built with Swift Charts.
           </p>
         </div>
         <div class="deep-dive-phones">
-          <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending analytics" loading="lazy"></div>
-          <div class="phone-frame"><img src="screenshots/insights-effects.png" alt="Effects and dispensary insights" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/insights-spending.png" alt="Spending and THC value analytics" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/insights-analysis.png" alt="Cost efficiency, effects, and dispensary analysis" loading="lazy"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Deep dive: Verdicts -->
+  <!-- Verdicts -->
   <section>
     <div class="container">
       <div class="fade-up" style="text-align:center; max-width:640px; margin:0 auto;">
         <p class="section-label">Smart Verdicts</p>
         <h2 class="section-title">Never forget what's worth reordering</h2>
         <p class="section-desc" style="margin:0 auto;">
-          Every strain gets an automatic verdict based on your ratings and the price. The logic is fully configurable — adjust thresholds, weight price sensitivity, prioritise effects over bag appeal, or disable ratings you don't care about.
+          Every strain gets an automatic verdict based on your ratings and true THC value (cost per mg). The logic is fully configurable — adjust thresholds, set your "good value per gram" and typical THC %, weight price sensitivity, prioritise effects over bag appeal, or disable ratings you don't care about. User-friendly sliders auto-calculate the cost-per-mg-THC budget threshold behind the scenes.
         </p>
       </div>
 
@@ -750,30 +570,72 @@
         <div class="verdict-card">
           <div class="verdict-emoji">🟢</div>
           <h4>Definite Rebuy</h4>
-          <p>High ratings across the board. Worth every penny. Get this on your next script.</p>
+          <p>High ratings above your configurable threshold. Worth every penny. Get this on your next script.</p>
         </div>
         <div class="verdict-card">
           <div class="verdict-emoji">🟡</div>
           <h4>Budget Pick</h4>
-          <p>Ratings are decent. The price makes it a solid choice when the top shelf is out.</p>
+          <p>Decent quality at good THC value. Uses cost per mg to find genuine bargains across product forms.</p>
+        </div>
+        <div class="verdict-card">
+          <div class="verdict-emoji">🔵</div>
+          <h4>Needs Investigation</h4>
+          <p>Not enough data or falls between thresholds. Could be a bad batch — worth trying again before writing off.</p>
         </div>
         <div class="verdict-card">
           <div class="verdict-emoji">🔴</div>
           <h4>Never Again</h4>
-          <p>Didn't work, didn't enjoy it. Save your money and avoid next time.</p>
-        </div>
-        <div class="verdict-card">
-          <div class="verdict-emoji">🟠</div>
-          <h4>Needs Investigation</h4>
-          <p>Mixed signals. Could be a bad batch. Worth trying again before writing off.</p>
+          <p>Scores below your minimum threshold. Save your money and avoid next time.</p>
         </div>
       </div>
 
       <div class="fade-up" style="margin-top:40px; text-align:center;">
         <div class="deep-dive-phones" style="justify-content:center;">
-          <div class="phone-frame" style="width:220px;"><img src="screenshots/settings.png" alt="Configurable verdict engine settings" loading="lazy"></div>
+          <div class="phone-frame" style="width:220px;"><img src="screenshots/settings-verdict.png" alt="Verdict engine configuration" loading="lazy"></div>
+          <div class="phone-frame" style="width:220px;"><img src="screenshots/settings-ratings.png" alt="Active ratings and price sensitivity" loading="lazy"></div>
         </div>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:20px;">Fully configurable verdict thresholds, price sensitivity, and active ratings</p>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:20px;">Configurable verdict thresholds, good-value-per-gram slider, typical THC %, price sensitivity, and active rating toggles</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard & extras -->
+  <section style="background: var(--bg-raised); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="deep-dive fade-up">
+        <div class="deep-dive-content">
+          <p class="section-label">Dashboard</p>
+          <h2 class="section-title">Everything at a glance</h2>
+          <p class="section-desc">
+            Stat cards for strains logged, favourites, this month's spend, and all-time spend. Quick links to your Favourites, Wishlist, and Tolerance Break tracker — with active T-Break progress shown inline. A Top Picks carousel shows your highest-rated strains, and Recent Logs gives you the last 5 entries at a glance.
+          </p>
+          <p class="section-desc" style="margin-top: 16px;">
+            New users get a clean welcome with two prominent options: start a Guided Session for the full experience, or Quick Add for faster logging.
+          </p>
+        </div>
+        <div class="deep-dive-phones">
+          <div class="phone-frame"><img src="screenshots/dashboard-empty.png" alt="Dashboard welcome with guided session" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/dashboard-data.png" alt="Dashboard with stats and top picks" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Onboarding -->
+  <section>
+    <div class="container">
+      <div class="deep-dive reverse fade-up">
+        <div class="deep-dive-content">
+          <p class="section-label">Onboarding</p>
+          <h2 class="section-title">Get started in 30 seconds</h2>
+          <p class="section-desc">
+            A four-page swipeable tutorial introduces every core concept on first launch — what GreenLog does, how product forms and ratings work, how the smart verdict system evaluates your strains, and the full feature set including analytics, wishlist, and tolerance breaks. Skip or walk through at your own pace.
+          </p>
+        </div>
+        <div class="deep-dive-phones">
+          <div class="phone-frame"><img src="screenshots/onboarding-welcome.png" alt="Onboarding welcome" loading="lazy"></div>
+          <div class="phone-frame"><img src="screenshots/onboarding-verdicts.png" alt="Onboarding smart verdicts" loading="lazy"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -790,17 +652,17 @@
         <div class="privacy-item">
           <div class="privacy-icon">🔒</div>
           <h3>On-Device Storage</h3>
-          <p>All data lives locally on your iPhone. Nothing is uploaded to external servers. No account required.</p>
+          <p>All data lives locally on your iPhone using SwiftData. Nothing is uploaded to external servers. No account required.</p>
         </div>
         <div class="privacy-item">
           <div class="privacy-icon">☁️</div>
-          <h3>Optional iCloud Sync</h3>
-          <p>Sync across your Apple devices via your personal iCloud account. Toggle it on or off — your choice.</p>
+          <h3>iCloud Sync</h3>
+          <p>Sync across all your Apple devices via your personal iCloud account with CloudKit. Your data never touches our servers.</p>
         </div>
         <div class="privacy-item">
           <div class="privacy-icon">📤</div>
           <h3>Full Data Export</h3>
-          <p>Export everything as JSON or CSV at any time. Your data is never locked in. Delete it all with one tap.</p>
+          <p>Export everything as CSV at any time. Your data is never locked in. Delete it all with one tap if you want.</p>
         </div>
       </div>
     </div>
@@ -849,17 +711,10 @@
   </footer>
 
   <script>
-    // Intersection Observer for fade-up animations
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   </script>
-
 </body>
 </html>
